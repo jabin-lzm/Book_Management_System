@@ -8,6 +8,7 @@ class User(models.Model):
     """
     id = models.CharField(verbose_name='用户名', max_length=8, primary_key=True)
     name = models.CharField(verbose_name='姓名', max_length=30)
+    email = models.EmailField(verbose_name="邮箱",max_length=254)
     password = models.CharField(verbose_name='密码', max_length=64)
     borrowed_books = models.ManyToManyField('Book', verbose_name='借阅书籍', through='Borrow')
 

@@ -10,6 +10,7 @@ class LoginForm(forms.Form):
 class RegisterForm(forms.Form):
     user_name = forms.CharField(label="姓名", max_length=30, widget=forms.TextInput(attrs={'class': 'form-control'}))
     user_id = forms.CharField(label="学号", min_length=8, max_length=8, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    email = forms.EmailField(label="邮箱",max_length=254,widget=forms.EmailInput(attrs={'class': 'form-control'}))
     password1 = forms.CharField(label="密码", min_length=6, max_length=64, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
     password2 = forms.CharField(label="确认密码", min_length=6, max_length=64, widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 

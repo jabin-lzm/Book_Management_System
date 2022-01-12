@@ -31,8 +31,8 @@ urlpatterns = [
     path('borrow/', BorrowView.as_view(), name='borrow'),
     path('return/', ReturnView.as_view(), name='return'),
     path('test/', TestView.as_view(), name='test'),
-    path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
-    #重置密码
-    path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
-    path('modify/',ModifyView.as_view(),name='modify'),
+    # path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
+    # #重置密码
+    # path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
+    # path('modify/',ModifyView.as_view(),name='modify'),
 ]
