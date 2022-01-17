@@ -135,3 +135,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
 ]
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # 引擎
+EMAIL_HOST= 'smtp.qq.com'  # 腾讯QQ邮箱的SMTP服务器地址
+EMAIL_PORT=25  # smtp服务端口号
+EMAIL_HOST_USER='1905471551@qq.com' #发送邮件的qq邮箱
+EMAIL_HOST_PASSWORD='miywlpbdxcvkbghg'  # 授权码，进邮箱里面拿
+EMAIL_USE_TLS=False # 与SMTP服务器通信时，是否启动TLS链接（安全连接〉，也就是是否加密
+EMAIL_FROM='1905471551@qq.com' #同样是你的邮箱，跟上面都是发信者邮箱
+
+

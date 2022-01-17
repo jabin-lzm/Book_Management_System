@@ -4,8 +4,9 @@ from django.views import View
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
 from book.forms import ForgetForm,ResetForm
+from book.utils.send_email import send_register_email
 from django.db.models import Q
-from book.models import User, Book, Borrow, Log
+from book.models import User, Book, Borrow, Log,EmailVerifyRecord
 from book.forms import LoginForm, RegisterForm, SearchForm
 from datetime import datetime, timedelta
 import hashlib
@@ -91,54 +92,57 @@ class RegisterView(View):
         return render(request, 'register.html', locals())
 
 
-# class ForgetPwdView(View):
-#     '''忘记密码'''
-#     def get(self,request):
-#         forget_form=ForgetForm()
-#         return render(request,'forget.html',{'forget_form':forget_form})
-#     def post(self,request):
-#         forget_form = ForgetForm(request.POST)
-#         if forget_form.is_valid():
-#             email=request.POST.get('email','')
-#             send_register_email(email,'forget')
-#             return render(request,'success_send.html')
-#         else:
-#             return render(request,'forget.html',{'forget_form':forget_form})
-#
-#
-# class ResetView(View):
-#     '''重置密码'''
-#     def get(self,request,active_code):
-#         record=EmailVerifyRecord.objects.filter(code=active_code)
-#         print(record)
-#         if record:
-#             for i in record:
-#                 email=i.email
-#                 is_register=UserProfile.objects.filter(email=email)
-#                 if is_register:
-#                     return render(request,'pwd_reset.html',{'email':email})
-#         return redirect('/login/')
-#
-#
-# #因为<form>表单中的路径要是确定的，所以post函数另外定义一个类来完成
-# class ModifyView(View):
-#     """重置密码post部分"""
-#     def post(self,request):
-#         reset_form=ResetForm(request.POST)
-#         if reset_form.is_valid():
-#             pwd1=request.POST.get('newpwd1','')
-#             pwd2=request.POST.get('newpwd2','')
-#             email=request.POST.get('email','')
-#             if pwd1!=pwd2:
-#                 return render(request,'pwd_reset.html',{'msg':'密码不一致！'})
-#             else:
-#                 user=UserProfile.objects.get(email=email)
-#                 user.password=make_password(pwd2)
-#                 user.save()
-#                 return redirect('/login/')
-#         else:
-#             email=request.POST.get('email','')
-#             return render(request,'pwd_reset.html',{'msg':reset_form.errors})
+class ForgetPwdView(View):
+    '''忘记密码'''
+    def get(self,request):
+        forget_form=ForgetForm()
+        return render(request,'forget.html',{'forget_form':forget_form})
+    def post(self,request):
+        forget_form = ForgetForm(request.POST)
+        if forget_form.is_valid():
+            email=request.POST.get('email','')
+            send_register_email(email)
+            return render(request,'success_send.html')
+        else:
+            return render(request,'forget.html',{'forget_form':forget_form})
+
+
+class ResetView(View):
+    '''重置密码'''
+    def get(self,request,active_code):
+        record=EmailVerifyRecord.objects.filter(code=active_code)
+        print(record)
+        if record:
+            for i in record:
+                print(i)
+                email=i.email
+                is_register=User.objects.filter(email=email)
+                if is_register:
+                    return render(request,'pwd_reset.html',{'email':email})
+        return redirect('/login/')
+
+
+#因为<form>表单中的路径要是确定的，所以post函数另外定义一个类来完成
+class ModifyView(View):
+    """重置密码post部分"""
+    def post(self,request):
+        reset_form=ResetForm(request.POST)
+        print(reset_form)
+        if reset_form.is_valid():
+            pwd1=request.POST.get('newpwd1','')
+            pwd2=request.POST.get('newpwd2','')
+            email=request.POST.get('email','')
+            print(email)
+            if pwd1!=pwd2:
+                return render(request,'pwd_reset.html',{'msg':'密码不一致！'})
+            else:
+                user=User.objects.get(email=email)
+                user.password= hashcode(pwd2, user.id)
+                user.save()
+                return redirect('/login/')
+        else:
+            email=request.POST.get('email','')
+            return render(request,'pwd_reset.html',{'msg':reset_form.errors})
 
 
 class HomeView(View):

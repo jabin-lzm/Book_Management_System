@@ -9,7 +9,7 @@ class User(models.Model):
     id = models.CharField(verbose_name='用户名', max_length=8, primary_key=True)
     name = models.CharField(verbose_name='姓名', max_length=30)
     email = models.EmailField(verbose_name="邮箱",max_length=254)
-    password = models.CharField(verbose_name='密码', max_length=64)
+    password = models.CharField(verbose_name='密码', max_length=128)
     borrowed_books = models.ManyToManyField('Book', verbose_name='借阅书籍', through='Borrow')
 
     class Meta:
@@ -76,3 +76,15 @@ class Log(models.Model):
 
     def __str__(self):
         return '[{}] {} {} {}'.format(self.time, self.user, self.action, self.book)
+
+
+class EmailVerifyRecord(models.Model):
+    """邮箱激活"""
+    code = models.CharField(max_length=20,verbose_name='验证码')
+    email = models.EmailField(max_length=50,verbose_name='邮箱')
+    send_time = models.DateField(verbose_name="发送时间",default=datetime.now)
+    class Meta:
+        verbose_name = '邮箱验证码'
+        verbose_name_plural = verbose_name
+    def __str__(self):
+        return '{0}({1})'.format(self.code,self.email)

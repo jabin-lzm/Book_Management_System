@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,re_path
-from django.conf.urls import url,include
+from django.conf.urls import include
 from book.views import *
 
 
@@ -31,8 +31,7 @@ urlpatterns = [
     path('borrow/', BorrowView.as_view(), name='borrow'),
     path('return/', ReturnView.as_view(), name='return'),
     path('test/', TestView.as_view(), name='test'),
-    # path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
-    # #重置密码
-    # path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
-    # path('modify/',ModifyView.as_view(),name='modify'),
+    path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
+    path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
+    path('modify/',ModifyView.as_view(),name='modify'),
 ]

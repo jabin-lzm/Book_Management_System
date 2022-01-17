@@ -1,6 +1,8 @@
 body {
     background-color: #eee;
     background:url("../images/library.jpg") no-repeat center center;
+    background-size: cover;
+    background-attachment: fixed;
 }
 .form-login {
     max-width: 330px;

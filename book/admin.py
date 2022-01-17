@@ -1,5 +1,5 @@
 from django.contrib import admin
-from book.models import User, Book, Borrow, Log
+from book.models import User, Book, Borrow, Log,EmailVerifyRecord
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -18,7 +18,14 @@ class LogAdmin(admin.ModelAdmin):
     list_display = ['id', 'time', 'user', 'book', 'action']
 
 
+class EmailVerifyRecordAdmin(admin.ModelAdmin):
+    list_display = ['code', 'email','send_time']
+    search_fields = ['code','email']
+    list_filter = ['code','email','send_time']
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Book, BookAdmin)
 admin.site.register(Borrow, BorrowAdmin)
 admin.site.register(Log, LogAdmin)
+admin.site.register(EmailVerifyRecord,EmailVerifyRecordAdmin)
