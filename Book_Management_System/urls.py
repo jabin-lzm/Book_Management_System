@@ -34,4 +34,5 @@ urlpatterns = [
     path('forget/',ForgetPwdView.as_view(),name='forget_pwd'),
     path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
     path('modify/',ModifyView.as_view(),name='modify'),
+    path('request/',RequestView.as_view(),name='request'),
 ]

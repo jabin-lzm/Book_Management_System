@@ -1,13 +1,10 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.views import View
 from django.contrib import messages
-from django.contrib.auth.hashers import make_password
-from book.forms import ForgetForm,ResetForm
 from book.utils.send_email import send_register_email
 from django.db.models import Q
-from book.models import User, Book, Borrow, Log,EmailVerifyRecord
-from book.forms import LoginForm, RegisterForm, SearchForm
+from book.models import User, Book, Borrow, Log,EmailVerifyRecord,Request
+from book.forms import LoginForm, RegisterForm, SearchForm,RequestForm,ForgetForm,ResetForm
 from datetime import datetime, timedelta
 import hashlib
 
@@ -161,7 +158,7 @@ class HomeView(View):
 
 class SearchView(View):
     """
-    借书
+    搜索图书
     """
     def get(self, request):
         if not request.session.get('is_login', None):
@@ -233,6 +230,38 @@ class ReturnView(View):
         return redirect('/home/')
 
 
+class RequestView(View):
+    """
+    申请书目操作
+    """
+    def get(self, request):
+        if not request.session.get('is_login', None):
+            messages.error(request, '请先登录！')
+            return redirect('/login/')
+        request_form = RequestForm()
+        return render(request, 'request_books.html', locals())
+
+    def post(self,request):
+        request_from = RequestForm(request.POST)
+        message = '请检查填写的内容'
+
+        user_id = request.session['user_id']
+
+        if request_from.is_valid():
+            book_name = request_from.cleaned_data['book_name']
+            author = request_from.cleaned_data['author']
+            publisher = request_from.cleaned_data['publisher']
+            request_time = datetime.now()
+            req = Request.objects.create(user_id=user_id, name=book_name, author=author, publisher=publisher,request_time=request_time)
+            req.is_available = False
+            req.save()
+            Log.objects.create(user_id=user_id,request=book_name,action="申请书目")
+            messages.success(request,' 申请成功！')
+        else:
+            messages.error(request,' 出现未知错误！')
+        return redirect('/request/')
+            
+
 class TestView(View):
     """
     for test
@@ -240,8 +269,6 @@ class TestView(View):
     def get(self, request):
         search_form = SearchForm()
         return render(request, 'test.html', locals())
-
-
 
 
 

@@ -19,6 +19,12 @@ class SearchForm(forms.Form):
     keyword = forms.CharField(label="关键词", max_length=60,
                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入关键词'}))
 
+
+class RequestForm(forms.Form):
+    book_name = forms.CharField(label='书名', max_length=192, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'book_name'}))
+    author = forms.CharField(label='作者', max_length=192, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'author'}))
+    publisher = forms.CharField(label='出版社', max_length='192', widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'publisher'}))
+
 # firget.html中，用于验证邮箱格式和验证码
 class ForgetForm(forms.Form):
     email = forms.EmailField(required=True)

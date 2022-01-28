@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}申请书目{% endblock %}
+
+{% block content %}
+    <div class="col-sm-3 col-md-2 sidebar" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+        <ul class="nav nav-sidebar">
+            <li><a href="/home/">我的借阅</a></li>
+            <li><a href="/search/">借书</a></li>
+            <li class="active"><a href="/request/">申请书目</a></li>
+        </ul>
+    </div>
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <form class='from-request' action="/request/" method="post">
+            {% csrf_token %}
+            <div class="from-row">
+                <div class="form-group col-md-3">
+                    <label for="inputbook">书名</label>
+                    {{ request_form.book_name }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputauthor">作者</label>
+                    {{ request_form.author }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputpublisher">出版社</label>
+                    {{ request_form.publisher }}
+                </div>
+                <div class="col-md-3">
+                    <label for="inputsubmit">操作</label>
+                </div>
+                <button class="btn btn-dark btn-outline-primary" type="submit">提交</button>
+            </div>
+        </form>
+
+        {% if message %}
+          <div class="alert alert-warning">{{ message }}</div>
+        {% endif %}
+    </div>
+{% endblock %}

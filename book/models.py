@@ -59,6 +59,27 @@ class Borrow(models.Model):
         return '{} borrowed {} at {}'.format(self.user, self.book, self.borrow_time)
 
 
+class Request(models.Model):
+    """
+    申请书目表
+    """
+    id = models.AutoField(verbose_name='序号', primary_key=True)
+    user = models.ForeignKey(User, verbose_name='申请者', on_delete=models.CASCADE)
+    name = models.CharField(verbose_name='书名', max_length=60)
+    author = models.CharField(verbose_name='作者', max_length=60)
+    publisher = models.CharField(verbose_name='出版社', max_length=60)
+    request_time = models.DateTimeField(verbose_name='申请时间', default=datetime.now())
+    is_available = models.BooleanField(verbose_name='申请状态', default=True)
+
+    class Meta:
+        verbose_name = '读者想看'
+        verbose_name_plural = verbose_name
+        ordering = ['id']
+
+    def __str__(self):
+        return '{} requested {} at {}'.format(self.user, self.name, self.request_time)
+
+
 class Log(models.Model):
     """
     日志表
@@ -67,6 +88,7 @@ class Log(models.Model):
     time = models.DateTimeField(verbose_name='时间', auto_now_add=True)
     user = models.ForeignKey(User, verbose_name='用户', on_delete=models.CASCADE)
     book = models.ForeignKey(Book, verbose_name='相关书籍', on_delete=models.CASCADE, null=True)
+    request = models.CharField(verbose_name='申请书籍',max_length=128)
     action = models.CharField(verbose_name='操作', max_length=30)
 
     class Meta:
@@ -75,7 +97,7 @@ class Log(models.Model):
         ordering = ['id']
 
     def __str__(self):
-        return '[{}] {} {} {}'.format(self.time, self.user, self.action, self.book)
+        return '[{}] {} {} {}'.format(self.time, self.user, self.action, self.request,self.book)
 
 
 class EmailVerifyRecord(models.Model):
