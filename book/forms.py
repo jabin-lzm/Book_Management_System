@@ -25,7 +25,8 @@ class RequestForm(forms.Form):
     author = forms.CharField(label='作者', max_length=192, widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'author'}))
     publisher = forms.CharField(label='出版社', max_length='192', widget=forms.TextInput(attrs={'class':'form-control', 'placeholder': 'publisher'}))
 
-# firget.html中，用于验证邮箱格式和验证码
+
+# forget.html中，用于验证邮箱格式和验证码
 class ForgetForm(forms.Form):
     email = forms.EmailField(required=True)
     captcha = CaptchaField(error_messages={'invalid':'验证码错误'})

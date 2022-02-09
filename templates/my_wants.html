@@ -1,17 +1,17 @@
 {% extends 'base.html' %}
-{% block title %}我的借阅{% endblock %}
+{% block title %}我的想看{% endblock %}
 
 {% block content %}
     <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
-            <li class="active"><a href="/home/">我的借阅</a></li>
+            <li><a href="/home/">我的借阅</a></li>
             <li><a href="/search/">借书</a></li>
             <li><a href="/request/">申请书目</a></li>
-            <li><a href="/want/">我的想看</a></li>
+            <li class="active"><a href="/want/">我的想看</a></li>
         </ul>
     </div>
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <h2 class="page-header">正在借阅</h2>
+        <h2 class="page-header">正在申请</h2>
         <div class="table-responsive">
             <table class="table table-striped">
               <thead>
@@ -20,28 +20,30 @@
                   <th scope="col">书名</th>
                   <th scope="col">作者</th>
                   <th scope="col">出版社</th>
-                  <th scope="col">借出时间</th>
-                  <th scope="col">归还期限</th>
+                  <th scope="col">申请时间</th>
                   <th scope="col">操作</th>
                 </tr>
               </thead>
               <tbody>
-                {% for entry in borrow_entries %}
+                {% for entry in req_entries %}
                     <tr>
                         <th scope="row">{{ forloop.counter }}</th>
-                        <td>{{ entry.book.name }}</td>
-                        <td>{{ entry.book.author }}</td>
-                        <td>{{ entry.book.publisher }}</td>
-                        <td>{{ entry.borrow_time }}</td>
-                        <td>{{ entry.return_ddl }}</td>
-                        <td><a class="btn btn-success btn-sm" href="/return/?book_id={{ entry.book.id }}">还书</a></td>
+                        <td>{{ entry.name }}</td>
+                        <td>{{ entry.author }}</td>
+                        <td>{{ entry.publisher }}</td>
+                        <td>{{ entry.request_time }}</td>
+                        {% if entry.is_available %}
+                            <td>申请成功</td>
+                        {% else %}
+                            <td>正在申请</td>
+                        {% endif %}
                     </tr>
                 {% endfor %}
               </tbody>
             </table>
         </div>
-        {% if not borrow_entries %}
-            <h5 class="page-header" align="center">您当前没有借书记录</h5>
+        {% if not req_entries %}
+            <h5 class="page-header" align="center">您当前没有申请记录</h5>
         {% endif %}
     </div>
 {% endblock %}

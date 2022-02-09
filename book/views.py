@@ -262,6 +262,17 @@ class RequestView(View):
         return redirect('/request/')
             
 
+class WantView(View):
+    def get(self,request):
+        if not request.session.get('is_login',None):
+            messages.error(request,'请先登录！')
+            return redirect('/login/')
+
+        user_id = request.session['user_id']
+        req_entries = Request.objects.filter(user_id=user_id)
+        return render(request,'my_wants.html',locals())
+
+
 class TestView(View):
     """
     for test
