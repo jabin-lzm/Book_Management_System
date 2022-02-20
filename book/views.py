@@ -10,7 +10,7 @@ import hashlib
 from notifications.signals import notify
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User as U
 
 
 class IndexView(View):
@@ -157,7 +157,7 @@ class HomeView(View):
         user_id = request.session['user_id']
         borrow_entries = Borrow.objects.filter(user_id=user_id)
         req_entries = Request.objects.filter(user_id=user_id)
-        admin_user = User.objects.filter(is_superuser=True).first()
+        admin_user = U.objects.filter(is_superuser=True).first()
 
         # 书的借阅日期
         for borrow in borrow_entries:
@@ -239,7 +239,6 @@ class ReturnView(View):
 
         user_id = request.session['user_id']
         book_id = request.GET.get('book_id')
-        admin_user = User.objects.filter(is_superuser=True).first()
         borrow_entries = Borrow.objects.filter(user_id=user_id, book_id=book_id)
         if borrow_entries:
             borrow_entry = borrow_entries.first()
@@ -298,6 +297,7 @@ class WantView(View):
             return redirect('/login/')
 
         user_id = request.session['user_id']
+        req_entries = Request.objects.filter(user_id=user_id)
         return render(request,'my_wants.html',locals())
 
 

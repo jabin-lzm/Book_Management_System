@@ -19,6 +19,7 @@ class BorrowAdmin(admin.ModelAdmin):
 
 class LogAdmin(admin.ModelAdmin):
     list_display = ['id', 'time', 'user', 'book', 'request', 'action']
+    list_per_page = 20
 
 
 class EmailVerifyRecordAdmin(admin.ModelAdmin):
