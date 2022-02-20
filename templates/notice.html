@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}我的借阅{% endblock %}
+
+<!-- 引入notifications的模板标签 -->
+{% load static %}
+{% load notifications_tags %}
+
+{# django-notifications-hq 实时更新api #}
+<script src="{% static 'js/notify.js' %}" type="text/javascript"></script>
+{% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+
+{% block content %}
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a href="/home/">我的借阅</a></li>
+            <li><a href="/search/">借书</a></li>
+            <li><a href="/request/">申请书目</a></li>
+            <li><a href="/want/">想看</a></li>
+            <li class="active">
+                <a class="dropdown-item" href="/notice/">系统通知
+                    <span class="badge badge-primary"> {% live_notify_badge %} </span>
+                </a>
+            </li>
+            <li><a href="/link/">更多资源</a></li>
+        </ul>
+    </div>
+
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <div class="row mt-4 ml-4">
+            <a href="{% url "update" %}" class="btn btn-info" role="button">清空所有通知</a>
+        </div>
+        <!-- 未删除通知列表 -->
+        <div class="row mt-2 ml-4">
+            <ul class="list-group list-group-flush">
+                {% for notice in notices %}
+                    <li class="list-group-item" id="notice_link">
+                        <a href="{% url "update" %}?notice_id={{ notice.id }}" >
+                            {{ notice.verb }}
+                        </a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ notice.timestamp|date:"Y/m/d H:i" }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+    <style>
+        #notice_link a:link {
+            color: black;
+        }
+
+        #notice_link a:visited {
+            color: lightgrey;
+        }
+    </style>
+
+    </div>
+{% endblock %}

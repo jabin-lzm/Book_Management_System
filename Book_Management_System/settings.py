@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
     'captcha',
+    'notifications',
 ]
 
 MIDDLEWARE = [

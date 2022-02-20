@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}更多资源{% endblock %}
+
+<!-- 引入notifications的模板标签 -->
+{% load static %}
+{% load notifications_tags %}
+
+{# django-notifications-hq 的实时更新api #}
+<script src="{% static 'js/notify.js' %}" type="text/javascript"></script>
+{% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+
+
+{% block content %}
+    <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+            <li><a href="/home/">我的借阅</a></li>
+            <li><a href="/search/">借书</a></li>
+            <li><a href="/request/">申请书目</a></li>
+            <li><a href="/want/">想看</a></li>
+            <li>
+                <a class="dropdown-item" href="/notice/">系统通知
+                    <span class="badge badge-primary"> {% live_notify_badge %} </span>
+                </a>
+            </li>
+            <li class="active"><a href="/link/">更多资源</a></li>
+        </ul>
+    </div>
+     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><a href="https://github.com/" target="_blank">0.程序员必备资源库 ---> (每个月少喝2杯奶茶或7瓶可乐就可以拥有的程序员天堂)</a></li>
+            <li class="list-group-item"><a href="https://cnki.net/" target="_blank">1.中国知网</a></li>
+            <li class="list-group-item"><a href="http://evrs.cqvip.com/view/postgraduate/index.asp" target="_blank">2.维普考研资源数据库</a></li>
+            <li class="list-group-item"><a href="http://kaoyan.cqvip.com/view/professional/index.aspx" target="_blank">3.维普考试服务平台</a></li>
+            <li class="list-group-item"><a href="http://read.nlc.cn/thematDataSearch/toGujiIndex">4.中华古籍资源库</a></li>
+            <li class="list-group-item"><a href="http://zsw.fanya.chaoxing.com/portal" target="_blank">5.超星泛雅网络教学平台</a></li>
+            <li class="list-group-item"><a href="https://www.zhihuishu.com/" target="_blank">6.智慧树在线教学平台</a></li>
+            <li class="list-group-item"><a href="https://wb.bjadks.com/" target="_blank">7.爱迪科森网上学术报告厅（账号：shandong 密码：123456）</a></li>
+            <li class="list-group-item"><a href="https://www.duxiu.com/" target="_blank">8.读秀中外文学术搜索引擎 </a></li>
+            <li class="list-group-item"><a href="https://wh.cnki.net/article/cjfutotal/UN101" target="_blank">9.中国知网——中国精品文化期刊文献库（帐号：dx1644 密码：sdycxy） </a></li>
+            <li class="list-group-item"><a href="https://wh.cnki.net/article/cjfvtotal/VN101" target="_blank">10.中国知网——中国精品文艺期刊文献库（帐号：dx1644 密码：sdycxy）</a></li>
+            <li class="list-group-item"><a href="hhttps://library.koolearn.com/index?t=1645184089000" target="_blank">11.新东方多媒体学习库 </a></li>
+            <li class="list-group-item"><a href="https://g.wanfangdata.com.cn/index.html" target="_blank">12.万方数据知识服务平台</a></li>
+            <li class="list-group-item"><a href="http://sxycxy.chineseall.cn/home/index" target="_blank">13.书香英才</a></li>
+            <li class="list-group-item"><a href="http://qikan.cqvip.com/" target="_blank">14.维普中文期刊数据库 </a></li>
+            <li class="list-group-item"><a href="http://www.gaozhi.cnki.net/sdyc/" target="_blank">15.山东英才学院知识服务平台 </a></li>
+            <li class="list-group-item"><a href="http://bksp.hnadl.cn/" target="_blank">16.百科视频</a></li>
+            <li class="list-group-item"><a href="https://topic.wanfangdata.com.cn/" target="_blank">17.万方选题数据库 </a></li>
+            <li class="list-group-item"><a href="http://ez.hnadl.cn/" target="_blank">18.EZonexam考试学习资源数据库 </a></li>
+            <li class="list-group-item"><a href="http://cmkd.hnadl.cn/Main.html" target="_blank">19.中国疾病知识库</a></li>
+            <li class="list-group-item"><a href="https://www.modernhistory.org.cn/#/" target="_blank">20.抗日战争与近代中日关系文献数据平台 </a></li>
+            <li class="list-group-item"><a href="https://lib.bingoenglish.com/" target="_blank">21.冰果英语</a></li>
+            <li class="list-group-item"><a href="https://cadal.edu.cn/index/home" target="_blank">22.大学数字图书馆国际合作计划 </a></li>
+            <li class="list-group-item"><a href="https://www.oalib.com/" target="_blank">23.Open Access Library (OALib)</a></li>
+            <li class="list-group-item"><a href="https://ir.nsfc.gov.cn//" target="_blank">24.国家自然科学基金基础研究知识库 </a></li>
+            <li class="list-group-item"><a href="https://www.las.ac.cn/" target="_blank">25.中科院文献情报中心（国家科学图书馆） </a></li>
+            <li class="list-group-item"><a href="http://search.ndltd.org/" target="_blank">26.NDLTD网络数字图书馆学位论文数据库 </a></li>
+            <li class="list-group-item"><a href="http://www.ycxy.com/cn/2015/392602.html" target="_blank">27.OA资源 </a></li>
+            <li class="list-group-item"><a href="https://ethos.bl.uk/Home.do" target="_blank">28.EthOS(The Electronic Theses Online System) </a></li>
+            <li class="list-group-item"><a href="http://open.sina.com.cn/" target="_blank">29.新浪公开课 </a></li>
+            <li class="list-group-item"><a href="https://open.163.com/" target="_blank">30.网易公开课</a></li>
+        </ul>
+     </div>
+{% endblock %}

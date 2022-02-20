@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,re_path
 from django.conf.urls import include
+import notifications.urls
 from book.views import *
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('inbox/notifications/', include(notifications.urls, namespace='notifications')),
     re_path('^captcha/',include('captcha.urls')),
     path('', IndexView.as_view(), name='index'),
     path('login/', LoginView.as_view(), name='login'),
@@ -35,5 +37,8 @@ urlpatterns = [
     path('reset/<str:active_code>',ResetView.as_view(),name='reset'),
     path('modify/',ModifyView.as_view(),name='modify'),
     path('request/',RequestView.as_view(),name='request'),
-    path('want/',WantView.as_view(),name='request'),
+    path('want/',WantView.as_view(),name='want'),
+    path('notice/',CommentNoticeListView.as_view(),name='notice'),
+    path('update/',CommentNoticeUpdateView.as_view(),name='update'),
+    path('link/',LinkView.as_view(),name='link')
 ]

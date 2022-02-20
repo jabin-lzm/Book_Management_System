@@ -7,7 +7,10 @@ from book.models import User, Book, Borrow, Log,EmailVerifyRecord,Request
 from book.forms import LoginForm, RegisterForm, SearchForm,RequestForm,ForgetForm,ResetForm
 from datetime import datetime, timedelta
 import hashlib
-
+from notifications.signals import notify
+from django.views.generic import ListView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 
 
 class IndexView(View):
@@ -153,6 +156,31 @@ class HomeView(View):
 
         user_id = request.session['user_id']
         borrow_entries = Borrow.objects.filter(user_id=user_id)
+        req_entries = Request.objects.filter(user_id=user_id)
+        admin_user = User.objects.filter(is_superuser=True).first()
+
+        # 书的借阅日期
+        for borrow in borrow_entries:
+            #  借阅时间3个月，提前3天通知
+            borrow_entry = borrow_entries.first()
+            delta = -(borrow_entry.borrow_time - datetime.now())  # 负天数不足一天算一天
+            exceed_days = delta.days - 90
+            if exceed_days == -3:
+            # if exceed_days < 0:
+                notify.send(
+                    admin_user,
+                    verb='同学你借阅的' + str(borrow.book)[1:] + " 还有三天到期",
+                    recipient= request.user,
+                )
+
+        for req in req_entries:
+            if req.is_available:
+                notify.send(
+                    admin_user,
+                    verb='同学你申请的' + str(req.name)[1:] + "到了",
+                    recipient=request.user,
+                )
+
         return render(request, 'home.html', locals())
 
 
@@ -211,6 +239,7 @@ class ReturnView(View):
 
         user_id = request.session['user_id']
         book_id = request.GET.get('book_id')
+        admin_user = User.objects.filter(is_superuser=True).first()
         borrow_entries = Borrow.objects.filter(user_id=user_id, book_id=book_id)
         if borrow_entries:
             borrow_entry = borrow_entries.first()
@@ -269,8 +298,48 @@ class WantView(View):
             return redirect('/login/')
 
         user_id = request.session['user_id']
-        req_entries = Request.objects.filter(user_id=user_id)
         return render(request,'my_wants.html',locals())
+
+
+class LinkView(View):
+    def get(self,request):
+        if not request.session.get('is_login',None):
+            messages.error(request,'请先登录！')
+            return redirect('/login/')
+
+        return render(request, 'link.html', locals())
+
+
+class CommentNoticeListView(LoginRequiredMixin, ListView):
+    """通知列表"""
+    # 上下文的名称
+    context_object_name = 'notices'
+    # 模板位置
+    template_name = 'notice.html'
+    # 登录重定向
+    login_url = '/login/'
+
+    # 未删除的查询集
+    def get_queryset(self):
+
+        return self.request.user.notifications.active()
+
+
+class CommentNoticeUpdateView(View):
+    """更新通知状态"""
+    # 处理 get 请求
+    def get(self, request):
+        # 获取未读消息
+        notice_id = request.GET.get('notice_id')
+        # 更新单条通知
+        if notice_id:
+            request.user.notifications.get(id=notice_id).mark_as_read()
+            return redirect('/notice/')
+        # 删除全部通知
+        else:
+            # request.user.notifications.mark_all_as_read()
+            request.user.notifications.mark_all_as_deleted()
+            return redirect('/notice/')
 
 
 class TestView(View):
